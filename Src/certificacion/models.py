@@ -8,7 +8,7 @@ class Certifiacion(models.Model):
 
 class Dominio(models.Model):
 	nombre = models.CharField(max_length=300)
-	numero = models.IntegerField(null=True, blank=True)
+	numero = models.CharField(max_length=30)
 	certifiacion = models.ForeignKey(Certifiacion)
 
 	def __str__(self):
@@ -16,7 +16,7 @@ class Dominio(models.Model):
 
 class Objetivo(models.Model):
 	nombre = models.CharField(max_length=300)
-	numero = models.IntegerField(null=True, blank=True)
+	numero = models.CharField(max_length=30)
 	domino = models.ForeignKey(Dominio)
 
 	def __str__(self):
@@ -24,7 +24,7 @@ class Objetivo(models.Model):
 
 class Control(models.Model):
 	nombre = models.CharField(max_length=1000)
-	numero = models.IntegerField(null=True, blank=True)
+	numero = models.CharField(max_length=30)
 	objetivo = models.ForeignKey(Objetivo)
 
 	def __str__(self):
