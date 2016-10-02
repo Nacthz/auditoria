@@ -21,6 +21,8 @@ class TrabajoAdmin(nested_admin.NestedModelAdmin):
 	get_fecha.admin_order_field = 'evaluacion__creacion'
 
 	def get_auditor(self, obj):
+		if(obj.auditor == None):
+			return None;
 		auditor = obj.auditor
 		return auditor.first_name + ' ' + auditor.last_name
 	get_auditor.short_description = 'Auditor'

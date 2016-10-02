@@ -8,6 +8,10 @@ Bienvenido representante de: {{ request.user.first_name }} | <a href="{% url 'us
 
 <br><br>
 
+<a href="{% url 'muro:crear' %}">Crear trabajo</a>
+
+<br><br>
+
 Lista de trabajos:
 
 <br><br>
@@ -15,6 +19,7 @@ Lista de trabajos:
 <table border="1">
   <tr>
     <th>Auditor</th>
+    <th>Certificación</th>
     <th>Fecha</th>
     <th>Estado</th>
     <th>Opciones</th>
@@ -25,6 +30,7 @@ Lista de trabajos:
   
   <tr>
     <td>{{ trabajo.getNombreAuditor }}</td>
+    <td>{{ trabajo.getNombreCertificacion }}</td>
     <td>{{ trabajo.getFecha }}</td>
     <td>{{ trabajo.estado }}</td>
     <td><a href="{{ trabajo.evaluacion.getUrl }}">Ver</a></td>

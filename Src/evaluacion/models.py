@@ -6,7 +6,7 @@ from certificacion.models import *
 class Evaluacion(models.Model):
 	creacion = models.DateTimeField(auto_now_add=True)
 	actualizacion = models.DateTimeField(auto_now=True)
-	certificacion = models.ForeignKey(Certifiacion)
+	certificacion = models.ForeignKey(Certificacion)
 
 	def __str__(self):
 		return self.certificacion.nombre + ' - ' + str(self.creacion)

@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<form method="post" action="{% url 'muro:crear_post' %}">
+	{% csrf_token %}
+	Certificación:<br>
+	{% if certificaciones %}
+	<select name="certificacion">
+		{% for certificacion in certificaciones %}
+		<option value="{{ certificacion.id }}">{{ certificacion.nombre }}</option>
+		{% endfor %}
+	</select> 
+	{% endif %}
+	<input type="submit" value="Submit">
+</form>
+
+{% endblock %}

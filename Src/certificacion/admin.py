@@ -20,15 +20,15 @@ class DominioInline(nested_admin.NestedTabularInline):
 		ObjetivoInline,
 	]
 
-class CertifiacionAdmin(nested_admin.NestedModelAdmin):
+class CertificacionAdmin(nested_admin.NestedModelAdmin):
 	list_display = ["nombre"]
 	inlines = [
 		DominioInline,
 	]
 	class Meta:
-		model = Certifiacion
+		model = Certificacion
 
-admin.site.register(Certifiacion, CertifiacionAdmin)
+admin.site.register(Certificacion, CertificacionAdmin)
 admin.site.register(Dominio)
 admin.site.register(Objetivo)
 admin.site.register(Control)

@@ -8,6 +8,10 @@ Bienvenido auditor: {{ request.user.first_name }} | <a href="{% url 'usuario:sal
 
 <br><br>
 
+<a href="{% url 'muro:lista' %}">Buscar trabajos</a>
+
+<br><br>
+
 Lista de trabajos:
 
 <br><br>
@@ -15,6 +19,7 @@ Lista de trabajos:
 <table border="1">
   <tr>
     <th>Empresa</th>
+    <th>Certificación</th>
     <th>Fecha</th>
     <th>Estado</th>
     <th>Editar</th>
@@ -25,6 +30,7 @@ Lista de trabajos:
   
   <tr>
     <td>{{ trabajo.getNombreEmpresa }}</td>
+    <td>{{ trabajo.getNombreCertificacion }}</td>
     <td>{{ trabajo.getFecha }}</td>
     <td>{{ trabajo.estado }}</td>
     <td>

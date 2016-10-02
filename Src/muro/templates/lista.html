@@ -1,0 +1,24 @@
+{% load humanize %}
+
+Lista de trabajos pendientes:
+
+<br><br>
+
+<table border="1">
+  <tr>
+    <th>Empresa</th>
+    <th>Fecha</th>
+    <th>Opciones</th>
+  </tr>
+
+{% if trabajos %}
+	{% for trabajo in trabajos %}
+  
+  <tr>
+    <td>{{ trabajo.getNombreEmpresa }}</td>
+    <td>{{ trabajo.creacion|naturaltime }}</td>
+    <td><a href="{{ trabajo.getUrlTomar }}">Tomar</a></td>
+  </tr>
+	
+	{% endfor %}
+{% endif %}

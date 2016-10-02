@@ -23,7 +23,6 @@ def index_auditor(request):
 	usuario = request.user
 	trabajos = Trabajo.objects.filter(auditor=usuario)
 	datos = {
-		'perfil': usuario.perfil,
 		'trabajos': trabajos,
 	}
 	return render(request, 'auditor.html', datos)
@@ -33,7 +32,6 @@ def index_empresa(request):
 	usuario = request.user
 	trabajos = Trabajo.objects.filter(empresa=usuario)
 	datos = {
-		'perfil': usuario.perfil,
 		'trabajos': trabajos,
 	}
 	return render(request, 'empresa.html', datos)

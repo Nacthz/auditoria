@@ -1,6 +1,6 @@
 from django.db import models
 
-class Certifiacion(models.Model):
+class Certificacion(models.Model):
 	nombre = models.CharField(max_length=300)
 
 	def __str__(self):
@@ -9,7 +9,7 @@ class Certifiacion(models.Model):
 class Dominio(models.Model):
 	nombre = models.CharField(max_length=300)
 	numero = models.CharField(max_length=30, default='')
-	certifiacion = models.ForeignKey(Certifiacion)
+	Certificacion = models.ForeignKey(Certificacion)
 
 	def __str__(self):
 		return self.nombre
