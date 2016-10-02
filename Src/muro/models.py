@@ -13,6 +13,21 @@ class Trabajo(models.Model):
 	def __str__(self):
 		return self.empresa.first_name + ' - ' + self.evaluacion.getNombre() + ' - ' + self.evaluacion.getFecha()
 
+	def getNombreEmpresa(self):
+		return self.empresa.first_name
+
+	def getNombreAuditor(self):
+		return self.auditor.first_name
+
+	def getFecha(self):
+		return formats.date_format(self.creacion, "SHORT_DATETIME_FORMAT")
+
+	def isActive(self):
+		respuesta = False
+		if self.estado.titulo == 'Activo':
+			respuesta = True
+		return respuesta
+
 class Estado(models.Model):
 	titulo = models.CharField(max_length=120, unique=True)
 

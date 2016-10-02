@@ -4,7 +4,43 @@
 
 {% block body %}
 
----Vista: Auditor---
-<br>
+Bienvenido auditor: {{ request.user.first_name }} | <a href="{% url 'usuario:salir_post' %}">Salir</a>
+
+<br><br>
+
+Lista de trabajos:
+
+<br><br>
+
+<table border="1">
+  <tr>
+    <th>Empresa</th>
+    <th>Fecha</th>
+    <th>Estado</th>
+    <th>Editar</th>
+  </tr>
+
+{% if trabajos %}
+	{% for trabajo in trabajos %}
+  
+  <tr>
+    <td>{{ trabajo.getNombreEmpresa }}</td>
+    <td>{{ trabajo.getFecha }}</td>
+    <td>{{ trabajo.estado }}</td>
+    <td>
+    	<a href="{{ trabajo.evaluacion.getUrl }}">
+    	{% if trabajo.isActive %} 
+    		Editar
+    	{% else %}
+    		Ver
+    	{% endif %}
+    	</a>
+    </td>
+  </tr>
+	
+	{% endfor %}
+{% endif %}
+
+</table>
 
 {% endblock body %}

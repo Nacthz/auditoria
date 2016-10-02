@@ -4,7 +4,35 @@
 
 {% block body %}
 
----Vista: Empresa---
-<br>
+Bienvenido representante de: {{ request.user.first_name }} | <a href="{% url 'usuario:salir_post' %}">Salir</a>
+
+<br><br>
+
+Lista de trabajos:
+
+<br><br>
+
+<table border="1">
+  <tr>
+    <th>Auditor</th>
+    <th>Fecha</th>
+    <th>Estado</th>
+    <th>Opciones</th>
+  </tr>
+
+{% if trabajos %}
+	{% for trabajo in trabajos %}
+  
+  <tr>
+    <td>{{ trabajo.getNombreAuditor }}</td>
+    <td>{{ trabajo.getFecha }}</td>
+    <td>{{ trabajo.estado }}</td>
+    <td><a href="{{ trabajo.evaluacion.getUrl }}">Ver</a></td>
+  </tr>
+	
+	{% endfor %}
+{% endif %}
+
+</table>
 
 {% endblock body %}

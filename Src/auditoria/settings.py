@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'certificacion',
     'usuario',
     'muro',
+    'raiz',
 ]
 
 MIDDLEWARE = [
