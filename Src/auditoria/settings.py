@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'evaluacion',
     'certificacion',
     'usuario',
-    'utils',
+    'muro',
 ]
 
 MIDDLEWARE = [
