@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from muro.models import Trabajo, Estado
-from certificacion.models import Certificacion
-from evaluacion.models import Evaluacion
+from certificacion.models import Certificacion, Control
+from evaluacion.models import Evaluacion, Calificacion
 
 #Funcion para tomar un trabajo
 def tomar(request, id):
@@ -55,5 +55,9 @@ def crear_post(request):
 	estado = Estado.objects.get(titulo='Inactivo')
 
 	Trabajo.objects.create(empresa=usuario, evaluacion=evaluacion, estado=estado)
+
+	controles = Control.objects.filter(objetivo__dominio__certificacion=certificacion)
+	for control in controles:
+		Calificacion.objects.create(control=control, evaluacion=evaluacion)
 
 	return redirect('usuario:inicio')

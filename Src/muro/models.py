@@ -24,9 +24,6 @@ class Trabajo(models.Model):
 	def getNombreCertificacion(self):
 		return self.evaluacion.getNombre()
 
-	def getUrlTomar(self):
-		return reverse("muro:tomar", kwargs={"id": self.id})
-
 	def getFecha(self):
 		return formats.date_format(self.creacion, "SHORT_DATETIME_FORMAT")
 
@@ -35,6 +32,13 @@ class Trabajo(models.Model):
 		if self.estado.titulo == 'Activo':
 			respuesta = True
 		return respuesta
+
+	def getUrl(self):
+		return reverse("evaluacion:ver", kwargs={"id": self.id})
+
+	def getUrlTomar(self):
+		return reverse("muro:tomar", kwargs={"id": self.id})
+
 
 class Estado(models.Model):
 	titulo = models.CharField(max_length=120, unique=True)

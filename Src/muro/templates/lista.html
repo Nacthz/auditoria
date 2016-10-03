@@ -1,4 +1,10 @@
+{% extends "layout.html" %}
+
 {% load humanize %}
+
+{% block title %}Lista de trabajos{% endblock title %}
+
+{% block body %}
 
 Lista de trabajos pendientes:
 
@@ -22,3 +28,5 @@ Lista de trabajos pendientes:
 	
 	{% endfor %}
 {% endif %}
+
+{% endblock body %}

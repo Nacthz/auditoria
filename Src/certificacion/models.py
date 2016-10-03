@@ -9,7 +9,7 @@ class Certificacion(models.Model):
 class Dominio(models.Model):
 	nombre = models.CharField(max_length=300)
 	numero = models.CharField(max_length=30, default='')
-	Certificacion = models.ForeignKey(Certificacion)
+	certificacion = models.ForeignKey(Certificacion)
 
 	def __str__(self):
 		return self.nombre
@@ -17,7 +17,7 @@ class Dominio(models.Model):
 class Objetivo(models.Model):
 	nombre = models.CharField(max_length=300)
 	numero = models.CharField(max_length=30, default='')
-	domino = models.ForeignKey(Dominio)
+	dominio = models.ForeignKey(Dominio)
 
 	def __str__(self):
 		return self.nombre

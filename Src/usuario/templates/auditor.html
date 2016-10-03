@@ -34,7 +34,7 @@ Lista de trabajos:
     <td>{{ trabajo.getFecha }}</td>
     <td>{{ trabajo.estado }}</td>
     <td>
-    	<a href="{{ trabajo.evaluacion.getUrl }}">
+    	<a href="{{ trabajo.getUrl }}">
     	{% if trabajo.isActive %} 
     		Editar
     	{% else %}

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, logout, login
 from muro.models import Trabajo
 
+#Vista de cambio para los usuario
 def index(request):
 	usuario = request.user
 	if usuario.is_authenticated():

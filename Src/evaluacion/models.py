@@ -17,9 +17,6 @@ class Evaluacion(models.Model):
 	def getFecha(self):
 		return formats.date_format(self.creacion, "SHORT_DATETIME_FORMAT")
 
-	def getUrl(self):
-		return reverse("evaluacion:ver", kwargs={"id": self.id})
-
 class Calificacion(models.Model):
 	control = models.ForeignKey(Control)
 	evaluacion = models.ForeignKey('Evaluacion')
