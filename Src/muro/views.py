@@ -22,7 +22,7 @@ def lista(request):
 	if not usuario.is_authenticated():
 		return redirect('raiz:inicio')
 
-	trabajos = Trabajo.objects.filter(estado__titulo='Inactivo')
+	trabajos = Trabajo.objects.filter(estado__titulo='Inactivo').order_by('-creacion')
 	datos = {
 		'trabajos': trabajos,
 	}
