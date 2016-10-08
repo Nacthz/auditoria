@@ -4,22 +4,24 @@ from django.http import HttpResponse
 from django.core import serializers
 from .models import *
 from muro.models import Trabajo, Estado
-from evaluacion.models import Calificacion
+from evaluacion.models import Evaluacion, Calificacion
 from certificacion.models import Control
 
-def ver(request, id):
+def ver(request, id, formulario):
 	trabajo = Trabajo.objects.get(id=id)
+	formulario = Evaluacion.objects.get(id=formulario)
 
 	datos = {
 		'trabajo': trabajo,
 		'estados': Estado.objects.all(),
-		'usuario': request.user.perfil.getTipo()
+		'usuario': request.user.perfil.getTipo(),
+		'formulario' : formulario
 	}
 	return render(request, 'evaluacion.html', datos)
 
 def get_calificaciones(request):
-	trabajo = Trabajo.objects.get(id=request.POST['id'])
-	calificaciones = Calificacion.objects.filter(evaluacion=trabajo.evaluacion)
+	evaluacion = Evaluacion.objects.get(id=request.POST['evaluacion'])
+	calificaciones = Calificacion.objects.filter(evaluacion=evaluacion)
 
 	calificaciones_lista = {}
 
@@ -42,7 +44,7 @@ def guardar_post(request):
 	comentarios = request.POST.getlist('comentarios[]')
 	comentarios_id = request.POST.getlist('comentarios_id[]')
 	trabajo = Trabajo.objects.get(id=request.POST['trabajo'])
-	evaluacion = trabajo.evaluacion
+	evaluacion = Evaluacion.objects.get(id=request.POST['evaluacion'])
 
 	trabajo.estado = Estado.objects.get(id=request.POST['estado'])
 	trabajo.save()

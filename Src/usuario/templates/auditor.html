@@ -22,7 +22,8 @@ Lista de trabajos:
     <th>Certificación</th>
     <th>Fecha</th>
     <th>Estado</th>
-    <th>Editar</th>
+    <th>Preparación</th>
+    <th>Anexo</th>
   </tr>
 
 {% if trabajos %}
@@ -34,13 +35,22 @@ Lista de trabajos:
     <td>{{ trabajo.getFecha }}</td>
     <td>{{ trabajo.estado }}</td>
     <td>
-    	<a href="{{ trabajo.getUrl }}">
+    	<a href="{{ trabajo.getUrlPreparacion }}">
     	{% if trabajo.isActive %} 
     		Editar
     	{% else %}
     		Ver
     	{% endif %}
     	</a>
+    </td>
+    <td>
+        <a href="{{ trabajo.getUrlAnexo }}">
+        {% if trabajo.isAnexo %} 
+            Editar
+        {% else %}
+            Ver
+        {% endif %}
+        </a>
     </td>
   </tr>
 	

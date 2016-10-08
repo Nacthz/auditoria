@@ -21,7 +21,8 @@ class Calificacion(models.Model):
 	control = models.ForeignKey(Control)
 	evaluacion = models.ForeignKey('Evaluacion')
 	cumplimiento = models.BooleanField(default=False)
-	comentario = models.CharField(max_length=1000, blank=True)
+	comentario = models.CharField(max_length=1000, null=True, blank=True)
+	ejemplo = models.CharField(max_length=1000, null=True, blank=True)
 
 	def __str__(self):
 		return self.control.nombre

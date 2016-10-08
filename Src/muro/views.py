@@ -35,7 +35,7 @@ def crear(request):
 	if not usuario.is_authenticated():
 		return redirect('raiz:inicio')
 
-	certificaciones = Certificacion.objects.all()
+	certificaciones = Certificacion.objects.filter(tipo__titulo='Anexo')
 
 	datos = {
 		'certificaciones': certificaciones,
@@ -51,13 +51,20 @@ def crear_post(request):
 
 	certificacion = Certificacion.objects.get(id=request.POST['certificacion'])
 	evaluacion = Evaluacion.objects.create(certificacion=certificacion)
+	preparacion = Evaluacion.objects.create(certificacion=certificacion.preparacion)
 
 	estado = Estado.objects.get(titulo='Inactivo')
 
-	Trabajo.objects.create(empresa=usuario, evaluacion=evaluacion, estado=estado)
+	Trabajo.objects.create(empresa=usuario, evaluacion=evaluacion, preparacion=preparacion, estado=estado)
 
+	#Evaluacion
 	controles = Control.objects.filter(objetivo__dominio__certificacion=certificacion)
 	for control in controles:
 		Calificacion.objects.create(control=control, evaluacion=evaluacion)
+
+	#Peparacion
+	controles = Control.objects.filter(objetivo__dominio__certificacion=certificacion.preparacion)
+	for control in controles:
+		Calificacion.objects.create(control=control, evaluacion=preparacion)
 
 	return redirect('usuario:inicio')

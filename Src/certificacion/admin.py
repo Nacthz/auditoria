@@ -21,7 +21,7 @@ class DominioInline(nested_admin.NestedTabularInline):
 	]
 
 class CertificacionAdmin(nested_admin.NestedModelAdmin):
-	list_display = ["nombre"]
+	list_display = ["nombre", "tipo"]
 	inlines = [
 		DominioInline,
 	]
@@ -32,3 +32,4 @@ admin.site.register(Certificacion, CertificacionAdmin)
 admin.site.register(Dominio)
 admin.site.register(Objetivo)
 admin.site.register(Control)
+admin.site.register(Tipo)
