@@ -10,7 +10,7 @@
 	<link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
 	<!-- Theme CSS -->
-	<link href="{% static 'css/freelancer.min.css' %}" rel="stylesheet">
+	<link href="{% static 'css/freelancer.css' %}" rel="stylesheet">
 
 	<!-- Custom Fonts -->
 	<link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
@@ -32,33 +32,44 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
-					<li class="hidden">
-						<a href="index.html#page-top"></a>
+					{% if user.is_authenticated %}
+					<li>
+						<a href="{% url 'usuario:inicio' %}">{{ user.first_name }} {{ user.last_name }}</a>
 					</li>
-					<li class="page-scroll">
-						<a href="index.html#portfolio">Conocenos</a>
+					<li>
+						<a href="">Análisis y resultados</a>
 					</li>
-					<li class="page-scroll">
-						<a href="index.html#about">NTC 27001</a>
+					<li>
+						<a href="">NTC 27001</a>
 					</li>
-					<li class="page-scroll">
-						<a href="auditor.html">Nueva auditoria</a>
+					<li>
+						<a href="">Politica</a>
 					</li>
-					<li class="page-scroll">
-						<a href="login.html">Login</a>
+					<li>
+						<a href="{% url 'usuario:salir_post' %}">Salir</a>
 					</li>
+					{% else %}
+					<li>
+						<a href="{% url 'usuario:ingresar' %}">Ingresar</a>
+					</li>
+					{% endif %}
 				</ul>
 
-			</div>
+			</div>				
 			<!-- /.navbar-collapse -->
 		</div>
 		<!-- /.container-fluid -->
 	</nav>
 
-	<!-- Portfolio Grid Section -->
-	<section align="center">
-		{% block body %}{% endblock body %}
-	</section>
+<br><br><br><br><br><br><br><br>
+
+<div class='container'>
+	{% block body %}
+
+	{% endblock body %}
+</div>
+
+<br><br>
 
 	<!-- Contact Section -->	
 	<footer class="text-center">

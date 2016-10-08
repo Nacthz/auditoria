@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% load static %}
+{% load humanize %}
+
+{% block title %}Gestion trabajo{% endblock title %}
+
+{% block body %}
+
+
+<h4>Empresa <small>{{ trabajo.getNombreEmpresa }}</small></h4>
+<h4>Auditor <small>{{ trabajo.getNombreAuditor }}</small></h4>
+<h4>Tipo <small>{{ trabajo.evaluacion.getNombre }}</small></h4>
+<h4>Fecha <small>{{ trabajo.evaluacion.getFecha }} | {{ trabajo.evaluacion.creacion|naturaltime }}</small></h4>
+<h4>Estado <small>{{ trabajo.estado.titulo }}</small></h4>
+
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <h2>Análisis y resultados</h2>
+        <hr class="star-primary">
+    </div>
+</div>
+<div class="row">
+
+    {% if perfil == 'Auditor' %}
+
+    {% if trabajo.estado.titulo == 'Activo' %}
+
+    <div class="col-sm-4">
+        <a href="{{ trabajo.getUrlPreparacion }}" class="portfolio-link" data-toggle="modal">
+            <img src="{% static 'img/portfolio/game.png' %}" class="img-responsive" alt="">
+            <H1 align="center"> REQUISITOS DE PREPARACIÓN </h1>
+            </a>
+        </div>
+
+        {% endif %}
+
+        {% if trabajo.estado.titulo == 'Anexo' %}
+
+        <div class="col-sm-4">
+            <a href="{{ trabajo.getUrlAnexo }}" class="portfolio-link" data-toggle="modal">
+                <img src="{% static 'img/portfolio/cabin.png' %}" class="img-responsive" alt="">
+                <H1 align="center"> Cumplimiento de controles </h1>
+                </a>
+            </div>
+
+            {% endif %}
+
+            {% endif %}
+
+            {% if trabajo.estado.titulo == 'Finalizado' %}
+
+            <div class="col-sm-4">
+                <a href="{{ trabajo.getUrl }}" class="portfolio-link" data-toggle="modal">
+                    <img src="{% static 'img/portfolio/circus.png' %}" class="img-responsive" alt="">
+                    <H1 align="center"> Resultados </h1>
+                    </a>
+                </div>
+
+                {% endif %}
+
+            </div>
+
+{% endblock body %}

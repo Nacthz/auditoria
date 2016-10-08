@@ -1,9 +1,47 @@
 {% extends "layout.html" %}
 
+{% load static %}
+
+
 {% block body %}
 
-Bienvenido al auditor online
+<header>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<img class="img-responsive" src="{% static 'img/profile.png' %}" alt="">
+				<div class="intro-text">
+					<span class="name">Auditor 27001:2013</span>
+					<hr class="star-light">
+					<span class="skills">Karen Mantilla - Juliana Rojas</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
 
-<a href="{% url 'usuario:ingresar' %}">Ingresar</a>
+<section class="success" id="about">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 text-center">
+				<h2>NTC 27001:2013</h2>
+				<hr class="star-light">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-4 col-lg-offset-2">
+				<p>Auditor 27001 es una aplicación que facilita a los auditores realizar las certificaciones, las cuales tienen el objetivo de comprobar que los procesos que se realizan en una empresa están regidos por la norma que se busca certificar, lo cual indica económicamente que los bienes o servicios que ofrecen son de calidad beneficiando a la empresa.     </p>
+			</div>
+			<div class="col-lg-4">
+				<p>El proceso de certificación requiere de una auditoria que reúna los documentos y evidencias que demuestren el cumplimiento de los ítems establecidos en la norma.</p>
+			</div>
+			<div class="col-lg-8 col-lg-offset-2 text-center">
+				<a href="http://intranet.bogotaturismo.gov.co/sites/intranet.bogotaturismo.gov.co/files/file/NTC-ISO-IEC%2027001.pdf" target="_blank" class="btn btn-lg btn-outline">
+					<i class="fa fa-download"></i> Conoce más
+				</a>
+			</div>
+		</div>
+	</div>
+</section>
 
 {% endblock body %}
