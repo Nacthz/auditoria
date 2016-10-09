@@ -46,7 +46,7 @@ def ver(request, id):
 #Vista para crear trabajos
 def crear(request):
 	usuario = request.user
-	if not usuario.is_authenticated():
+	if not usuario.is_authenticated() or usuario.perfil.getTipo != 'Auditor':
 		return redirect('raiz:inicio')
 
 	certificaciones = Certificacion.objects.filter(tipo__titulo='Anexo')
