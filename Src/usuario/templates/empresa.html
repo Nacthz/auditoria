@@ -28,8 +28,7 @@ Bienvenido representante de: {{ request.user.first_name }} | <a href="{% url 'us
     <th>Certificación</th>
     <th>Fecha</th>
     <th>Estado</th>
-    <th>Preparación</th>
-    <th>Anexo</th>
+    <th>Opcion</th>
   </tr>
 
 {% if trabajos %}
@@ -40,8 +39,13 @@ Bienvenido representante de: {{ request.user.first_name }} | <a href="{% url 'us
     <td>{{ trabajo.getNombreCertificacion }}</td>
     <td>{{ trabajo.getFecha }}</td>
     <td>{{ trabajo.estado }}</td>
-    <td><a href="{{ trabajo.getUrlPreparacion }}">Ver</a></td>
-    <td><a href="{{ trabajo.getUrlAnexo }}">Ver</a></td>
+    <td>
+      {% if trabajo.perfil.getTipo == 'Finalizado' %} 
+        <a href="{{ trabajo.getUrl }}">Descargar</a>
+      {% else %}
+        En espera...
+      {% endif %}
+      </td>
   </tr>
 	
 	{% endfor %}
