@@ -17,6 +17,11 @@ p {
 p.small {
   font-size: 16px;
 }
+SELECT {
+
+
+  font-size: 25pt;
+  }
 a,
 a:hover,
 a:focus,

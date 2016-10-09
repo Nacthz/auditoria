@@ -6,6 +6,16 @@
 
 {% block body %}
 
+<h4>{{ trabajo.getNombreEmpresa }}</h4>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 <form method="post" action="{% url 'evaluacion:guardar_post' %}">
 
 	<input name="trabajo" type="hidden" value="{{ trabajo.id }}">
@@ -68,7 +78,8 @@
 	<br><br>
 
 	{% if trabajo.estado.titulo != 'Finalizado' and usuario == 'Auditor' %}
-	<input type="submit" class="btn btn-primary" value="Guardar">
+	<button type="submit" class="btn btn-success btn-lg">Guardar</button>
+	<br><br>
 	{% endif %}
 
 </form>

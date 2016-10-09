@@ -8,15 +8,18 @@ Bienvenido auditor: {{ request.user.first_name }} | <a href="{% url 'usuario:sal
 
 <br><br>
 
-<a href="{% url 'muro:lista' %}">Buscar trabajos</a>
-
 <br><br>
 
-Lista de trabajos:
-
+<br>
+<div class="col-lg-12 text-center">
+                    <h2>Trabajos en proceso:</h2>
+                    <hr class="star-primary">
+                    <div class="col-sm-4 portfolio-item">
+</div>
+</div>
 <br><br>
 
-<table border="1" align="center">
+<table style="width:100%" >
   <tr>
     <th>Empresa</th>
     <th>Certificación</th>
@@ -48,5 +51,6 @@ Lista de trabajos:
 {% endif %}
 
 </table>
+<br>
 
 {% endblock body %}
