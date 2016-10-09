@@ -40,8 +40,8 @@ Bienvenido representante de: {{ request.user.first_name }} | <a href="{% url 'us
     <td>{{ trabajo.getFecha }}</td>
     <td>{{ trabajo.estado }}</td>
     <td>
-      {% if trabajo.perfil.getTipo == 'Finalizado' %} 
-        <a href="{{ trabajo.getUrl }}">Descargar</a>
+      {% if trabajo.estado.titulo == 'Finalizado' %} 
+        <a href="{{ trabajo.getUrlDescarga }}">Descargar</a>
       {% else %}
         En espera...
       {% endif %}

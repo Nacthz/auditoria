@@ -84,3 +84,17 @@ def crear_post(request):
 		Calificacion.objects.create(control=control, evaluacion=preparacion)
 
 	return redirect('usuario:inicio')
+
+#Descargra trabajo
+def descargar(request, id):
+	usuario = request.user
+	if not usuario.is_authenticated():
+		return redirect('raiz:inicio')
+
+	trabajo = Trabajo.objects.get(id=id)
+	datos = {
+		'trabajo': trabajo,
+		'perfil': usuario.perfil.getTipo()
+	}
+
+	return render(request, 'trabajo.html', datos)

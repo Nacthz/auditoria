@@ -23,3 +23,4 @@ class EvaluacionAdmin(nested_admin.NestedModelAdmin):
 
 admin.site.register(Evaluacion, EvaluacionAdmin)
 admin.site.register(Calificacion)
+admin.site.register(Cumplimiento)

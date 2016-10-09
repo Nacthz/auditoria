@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.core import serializers
 from .models import *
 from muro.models import Trabajo, Estado
-from evaluacion.models import Evaluacion, Calificacion
+from evaluacion.models import Evaluacion, Calificacion, Cumplimiento
 from certificacion.models import Control
 
 def ver(request, id, formulario):
@@ -34,7 +34,7 @@ def get_calificaciones(request):
 		calificaciones_lista[i] = {
 			'control_id': calificacion.control.id,
 			'comentario': calificacion.comentario,
-			'estado': calificacion.cumplimiento
+			'cumplimiento': calificacion.cumplimiento.id
 		}
 		i+=1
 
@@ -43,26 +43,25 @@ def get_calificaciones(request):
 	}
 	return HttpResponse(json.dumps(respuesta), content_type='application/json')
 
+
 def guardar_post(request):
-	controles = request.POST.getlist('controles[]')
-	comentarios = request.POST.getlist('comentarios[]')
-	comentarios_id = request.POST.getlist('comentarios_id[]')
-	trabajo = Trabajo.objects.get(id=request.POST['trabajo'])
-	evaluacion = Evaluacion.objects.get(id=request.POST['evaluacion'])
+	if request.method == 'POST':
+		data = request.POST
+		evaluacion = Evaluacion.objects.get(id=request.POST['evaluacion'])
 
-	trabajo.estado = Estado.objects.get(id=request.POST['estado'])
-	trabajo.save()
+		trabajo = Trabajo.objects.get(id=data.get('trabajo'))
+		trabajo.estado = Estado.objects.get(id=data.get('estado'))
+		trabajo.save()
 
-	evaluacion.calificacion_set.all().update(cumplimiento=False, comentario='')
+		preguntas = evaluacion.calificacion_set.all()
+		for pregunta in preguntas:
+			control_id = str(pregunta.control.id)
 
-	for control_id in controles:
-		control = Control.objects.get(id=control_id)
-		Calificacion.objects.filter(evaluacion=evaluacion, control=control).update(cumplimiento=True)
+			comentario = data.get('json_data['+ control_id +'][comentario]')
+			valoracion = data.get('json_data['+ control_id +'][valoracion]')
 
-	i = 0
-	for comentario in comentarios:
-		control = Control.objects.get(id=comentarios_id[i])
-		Calificacion.objects.filter(evaluacion=evaluacion, control=control).update(comentario=comentario)
-		i+=1
+			cumplimiento = Cumplimiento.objects.get(id=valoracion)
+
+			Calificacion.objects.filter(evaluacion=evaluacion, control_id=control_id).update(comentario=comentario, cumplimiento=cumplimiento)
 
 	return redirect('muro:ver', id=trabajo.id)

@@ -29,13 +29,12 @@
 			<select id="estado" class="form-control" name="estado">
 			{% if trabajo.estado.titulo == 'Activo' %}
 				<option value="1">Activo</option>
-				<option value="4">Anexo</option>
-				<option value="2">Finalizado</option>
+				<option value="4">Completado</option>
 			{% endif %}
 
 			{% if trabajo.estado.titulo == 'Anexo' %}
 				<option value="4">Anexo</option>
-				<option value="2">Finalizado</option>
+				<option value="2">Completado</option>
 			{% endif %}
 			</select>
 		</div>
@@ -60,11 +59,14 @@
 							{{ control.numero }} ) {{ control }}
 						</div>
 						<div class="col-sm-3">
-							<input type="checkbox" id="calificacion-{{ control.id }}" name="controles[]" value="{{ control.id }}">
+							<select id="ca-{{control.id}}" name="json_data[{{control.id}}][valoracion]" class="form-control">
+								<option value="1">No</option>
+								<option value="2">Si</option>
+								<option value="3">No aplica</option>
+							</select>
 						</div>
 						<div class="col-sm-3">
-							<textarea id="comentario-{{ control.id }}" type="text" class="form-control"  name="comentarios[]"></textarea>
-							<input type="hidden" name="comentarios_id[]" value="{{ control.id }}">
+							<textarea id="co-{{control.id}}" type="text" class="form-control"  name="json_data[{{control.id}}][comentario]"></textarea>
 						</div>
 					</div>
 					{% endfor %}
@@ -98,8 +100,8 @@ $.ajax({
 		var calificaciones = datos.calificaciones;
 
 		$.each(calificaciones, function(i, calificacion) {
-			$("#calificacion-" + calificacion.control_id).prop("checked", calificacion.estado);
-			$("#comentario-" + calificacion.control_id).prop("value", calificacion.comentario);
+			$("#ca-" + calificacion.control_id).prop("value", calificacion.cumplimiento);
+			$("#co-" + calificacion.control_id).prop("value", calificacion.comentario);
 		});
 	},
 	error: function(jqXHR){

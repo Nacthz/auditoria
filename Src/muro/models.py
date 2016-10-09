@@ -55,6 +55,9 @@ class Trabajo(models.Model):
 	def getUrlPreparacion(self):
 		return reverse("evaluacion:ver", kwargs={"id": self.id, "formulario": self.preparacion.id})
 
+	def getUrlDescarga(self):
+		return reverse("muro:descargar", kwargs={"id": self.id})
+
 	def getUrlTomar(self):
 		return reverse("muro:tomar", kwargs={"id": self.id})
 
