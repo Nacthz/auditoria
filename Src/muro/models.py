@@ -46,6 +46,9 @@ class Trabajo(models.Model):
 			respuesta = True
 		return respuesta
 
+	def getUrl(self):
+		return reverse("muro:ver", kwargs={"id": self.id})
+
 	def getUrlAnexo(self):
 		return reverse("evaluacion:ver", kwargs={"id": self.id, "formulario": self.evaluacion.id})
 

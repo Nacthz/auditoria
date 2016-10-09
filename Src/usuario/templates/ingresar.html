@@ -2,19 +2,42 @@
 
 {% block body %}
 
-{% if error %}
-<p>{{error}}</p>
-{% endif %}
+<section id="login">
+	<div class="container">
+		<div class="row">
+			<br><br><br><br>
+			<div class="col-lg-12 text-center">
+				<h2>Inicio de sesión</h2>
+				<hr class="star-primary">
+				<form method="post" action="{% url 'usuario:ingresar_post' %}">
+					{% csrf_token %}
+					<h1>Acceder para continuar</h1>
+					<div class="row control-group">
+						<div class="col-lg-8 col-lg-offset-2">
+							<div class="form-group col-xs-12 floating-label-form-group controls">
 
-<form method="post" action="{% url 'usuario:ingresar_post' %}">
-	{% csrf_token %}
-	Usuario:<br>
-	<input type="text" name="username">
-	<br>
-	Contraseña:<br>
-	<input type="password" name="password">
-	<br><br>
-	<input type="submit" value="Submit">
-</form>
+								<input type="text" class="form-control" placeholder="Nombre de usuario" name="username" required data-validation-required-message="Por favor ingrese el nombre de usuario">
+								<p class="help-block text-danger"></p>
+
+								<input type="password" class="form-control" placeholder="Contraseña" name="password" required data-validation-required-message="Por favor ingrese la contraseña.">
+								<p class="help-block text-danger"></p>
+
+								{% if error %}
+									<p style="color: red;">{{error}}</p>
+								{% endif %}
+
+								<div class="form-group col-xs-12">
+									<button type="submit" class="btn btn-success btn-lg">Ingresar</button>
+								</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
 
 {% endblock %}

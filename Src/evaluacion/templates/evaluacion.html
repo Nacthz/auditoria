@@ -6,70 +6,105 @@
 
 {% block body %}
 
-Empresa: {{ trabajo.getNombreEmpresa }}
+<h4>{{ trabajo.getNombreEmpresa }}</h4>
+
 <br>
-Tipo: {{ trabajo.evaluacion.getNombre }}
 <br>
-Fecha: {{ trabajo.evaluacion.getFecha }} | {{ trabajo.evaluacion.creacion|naturaltime }}
-<br><br>
+<br>
+<br>
+<br>
+<br>
+
+
 <form method="post" action="{% url 'evaluacion:guardar_post' %}">
+
 	<input name="trabajo" type="hidden" value="{{ trabajo.id }}">
 	<input name="evaluacion" type="hidden" value="{{ formulario.id }}">
-	Estado:
 
-{% if trabajo.estado.titulo == 'Activo' and usuario == 'Auditor' %}
-	<select id="estado" name="estado">
-		{% for estado in estados %}
-		<option value="{{ estado.id }}">{{ estado }}</option>
-		{% endfor %}
-	</select>
-	{% csrf_token %}
-{% else %}
-	{{ trabajo.estado }}
-{% endif %}
+	{% if usuario == 'Auditor' %}
+		{% csrf_token %}
+		Estado:
+		<br>
+		<div class="col-sm-3">
+			<select id="estado" class="form-control" name="estado">
+			{% if trabajo.estado.titulo == 'Activo' %}
+				<option value="1">Activo</option>
+				<option value="4">Anexo</option>
+				<option value="2">Finalizado</option>
+			{% endif %}
+
+			{% if trabajo.estado.titulo == 'Anexo' %}
+				<option value="4">Anexo</option>
+				<option value="2">Finalizado</option>
+			{% endif %}
+			</select>
+		</div>
+		<br>
+	{% else %}
+		{{ trabajo.estado }}
+	{% endif %}
+
+	<br><br>
 
 	{% for dominio in formulario.certificacion.dominio_set.all %}
-		<h3>{{ dominio.numero }} ) {{ dominio }}</h3>
-
+	<div class="fieldset">
+		<legend>{{ dominio.numero }} ) {{ dominio }}</legend>
 		{% for objetivo in dominio.objetivo_set.all %}
-			<h4>{{ objetivo.numero }} ) {{ objetivo }}</h4>
-
-			{% for control in objetivo.control_set.all %}
-				<p>
-					{{ control.numero }} ) {{ control }}
-					<input type="checkbox" id="calificacion-{{ control.id }}" name="controles[]" value="{{ control.id }}">
-					Comentario: <input id="comentario-{{ control.id }}" type="text" name="comentarios[]">
-					<input type="hidden" name="comentarios_id[]" value="{{ control.id }}">
-				</p>
-			{% endfor %}
+		<div class="row-fluid">
+			<div class="span6">
+				<div class="fieldset">
+					<legend>{{ objetivo.numero }} ) {{ objetivo }}</legend>
+					{% for control in objetivo.control_set.all %}
+					<div class="row">
+						<div class="col-sm-6">
+							{{ control.numero }} ) {{ control }}
+						</div>
+						<div class="col-sm-3">
+							<input type="checkbox" id="calificacion-{{ control.id }}" name="controles[]" value="{{ control.id }}">
+						</div>
+						<div class="col-sm-3">
+							<textarea id="comentario-{{ control.id }}" type="text" class="form-control"  name="comentarios[]"></textarea>
+							<input type="hidden" name="comentarios_id[]" value="{{ control.id }}">
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
 		{% endfor %}
+	</div>
 	{% endfor %}
-	<br>
-	<br>
-{% if trabajo.estado.titulo == 'Activo' and usuario == 'Auditor' %}
-	<input type="submit" value="Guardar">
-{% endif %}
+
+	<br><br>
+
+	{% if trabajo.estado.titulo != 'Finalizado' and usuario == 'Auditor' %}
+	<button type="submit" class="btn btn-success btn-lg">Guardar</button>
+	<br><br>
+	{% endif %}
+
 </form>
+
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script type="text/javascript">
-	$.ajax({
-        url: "{% url 'evaluacion:get_calificaciones' %}",
-        data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': {{ trabajo.id }}, 'evaluacion': {{ formulario.id }}},
-        contentType: "application/x-www-form-urlencoded",
-        dataType: "json",
-        type: "POST",
-        success: function (datos) {
-			var calificaciones = datos.calificaciones;
+$.ajax({
+	url: "{% url 'evaluacion:get_calificaciones' %}",
+	data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': {{ trabajo.id }}, 'evaluacion': {{ formulario.id }}},
+	contentType: "application/x-www-form-urlencoded",
+	dataType: "json",
+	type: "POST",
+	success: function (datos) {
+		var calificaciones = datos.calificaciones;
 
-            $.each(calificaciones, function(i, calificacion) {
-                $("#calificacion-" + calificacion.control_id).prop("checked", calificacion.estado);
-                $("#comentario-" + calificacion.control_id).prop("value", calificacion.comentario);
-            });
-        },
-        error: function(jqXHR){
-        }
-    });
+		$.each(calificaciones, function(i, calificacion) {
+			$("#calificacion-" + calificacion.control_id).prop("checked", calificacion.estado);
+			$("#comentario-" + calificacion.control_id).prop("value", calificacion.comentario);
+		});
+	},
+	error: function(jqXHR){
+	}
+});
 </script>
 
 {% endblock body %}

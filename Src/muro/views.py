@@ -29,6 +29,20 @@ def lista(request):
 
 	return render(request, 'lista.html', datos)
 
+#Vista para ver trabajo unico
+def ver(request, id):
+	usuario = request.user
+	if not usuario.is_authenticated():
+		return redirect('raiz:inicio')
+
+	trabajo = Trabajo.objects.get(id=id)
+	datos = {
+		'trabajo': trabajo,
+		'perfil': usuario.perfil.getTipo()
+	}
+
+	return render(request, 'trabajo.html', datos)
+
 #Vista para crear trabajos
 def crear(request):
 	usuario = request.user

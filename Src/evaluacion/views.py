@@ -8,6 +8,10 @@ from evaluacion.models import Evaluacion, Calificacion
 from certificacion.models import Control
 
 def ver(request, id, formulario):
+	usuario = request.user
+	if not usuario.is_authenticated():
+		return redirect('raiz:inicio')
+		
 	trabajo = Trabajo.objects.get(id=id)
 	formulario = Evaluacion.objects.get(id=formulario)
 
@@ -61,4 +65,4 @@ def guardar_post(request):
 		Calificacion.objects.filter(evaluacion=evaluacion, control=control).update(comentario=comentario)
 		i+=1
 
-	return redirect('usuario:ingresar')
+	return redirect('muro:ver', id=trabajo.id)
