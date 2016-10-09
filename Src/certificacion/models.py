@@ -5,7 +5,6 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 class Certificacion(models.Model):
 	nombre = models.CharField(max_length=300, null=True, blank=True)
 	tipo = models.ForeignKey('Tipo')
-	preparacion = models.ForeignKey('self', null=True, blank=True)
 
 	def __str__(self):
 		return self.nombre
@@ -29,13 +28,14 @@ class Objetivo(models.Model):
 class Control(models.Model):
 	nombre = models.CharField(max_length=1000, null=True, blank=True)
 	numero = models.CharField(max_length=30, null=True, blank=True)
+	ayuda = models.CharField(max_length=1000, null=True, blank=True)
 	objetivo = models.ForeignKey('Objetivo')
 
 	def __str__(self):
 		return self.nombre
 
 class Tipo(models.Model):
-	titulo = models.CharField(max_length=120, unique=True, null=True, blank=True)
+	titulo = models.CharField(max_length=120, unique=True)
 
 	def __str__(self):
 		return self.titulo
