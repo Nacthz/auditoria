@@ -5,6 +5,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 class Certificacion(models.Model):
 	nombre = models.CharField(max_length=300, null=True, blank=True)
 	tipo = models.ForeignKey('Tipo')
+	preparacion = models.ForeignKey('self')
 
 	def __str__(self):
 		return self.nombre

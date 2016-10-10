@@ -1,3 +1,4 @@
 Django==1.10.1
 django-nested-admin==3.0.10
 django-suit==0.2.21
+xlsxwriter==0.9.3
