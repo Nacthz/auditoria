@@ -53,11 +53,11 @@
 
 					{% endif %}
 
-{% if user.perfil.getTipo == 'Auditor' %}
+					{% if user.perfil.getTipo == 'Auditor' %}
 					<li>
 						<a href="">Politica</a>
 					</li>
-{% endif %}
+					{% endif %}
 					<li>
 						<a href="{% url 'usuario:salir_post' %}">Salir</a>
 					</li>
