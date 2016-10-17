@@ -170,9 +170,9 @@ def escribirExcel(trabajo):
 				calificacion = Calificacion.objects.get(evaluacion=preparacion, control=control)
 
 				worksheet.write(fila, 2, calificacion.cumplimiento.titulo)
-				if calificacion.cumplimiento.id == 1:
-					si_sub += 1
 				if calificacion.cumplimiento.id == 2:
+					si_sub += 1
+				if calificacion.cumplimiento.id == 1:
 					no_sub += 1
 				worksheet.write(fila, 3, calificacion.comentario, text_wrap)
 				fila += 1
@@ -234,9 +234,9 @@ def escribirExcel(trabajo):
 				calificacion = Calificacion.objects.get(evaluacion=evaluacion, control=control)
 
 				worksheet.write(fila, 2, calificacion.cumplimiento.titulo)
-				if calificacion.cumplimiento.id == 1:
-					si_sub += 1
 				if calificacion.cumplimiento.id == 2:
+					si_sub += 1
+				if calificacion.cumplimiento.id == 1:
 					no_sub += 1
 				if calificacion.cumplimiento.id == 3:
 					tal_sub += 1
@@ -244,7 +244,7 @@ def escribirExcel(trabajo):
 				fila += 1
 		worksheet.write(fila, 4, 'SI', center)
 		worksheet.write(fila, 5, 'NO', center)
-		worksheet.write(fila, 6, 'TAL VEZ', center)
+		worksheet.write(fila, 6, 'NO APLICA', center)
 		fila += 1
 		worksheet.write(fila, 4, si_sub, center)
 		worksheet.write(fila, 5, no_sub, center)
