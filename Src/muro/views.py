@@ -119,14 +119,16 @@ def escribirExcel(trabajo):
 	background2 = workbook.add_format({'bg_color': '#18BC9C'})
 	right_align = workbook.add_format({'align': 'right'})
 	h1 = workbook.add_format({'font_size': 13, 'bold': True})
-	h2 = workbook.add_format({'font_size': 12, 'bold': True})
-	h3 = workbook.add_format({'font_size': 11, 'bold': True})
+	h2 = workbook.add_format({'font_size': 12, 'bold': True, 'text_wrap': True})
+	h3 = workbook.add_format({'font_size': 11, 'bold': True, 'text_wrap': True})
+	text_wrap = workbook.add_format({'text_wrap': True})
+	right = workbook.add_format({'align': 'right'})
+	center = workbook.add_format({'align': 'center'})
 
 	worksheet.set_column('A:A', 8)
-	worksheet.set_column('B:B', 80)
+	worksheet.set_column('B:B', 50)
 	worksheet.set_column('C:C', 14)
-	worksheet.set_column('D:D', 5)
-	worksheet.set_column('E:E', 50)
+	worksheet.set_column('D:D', 35)
 
 	imagenEncabezado = settings.BASE_DIR + settings.STATIC_URL + 'img/logo.png'
 	worksheet.insert_image('A1', imagenEncabezado, {'x_offset': 15, 'y_offset': 10})
@@ -145,15 +147,17 @@ def escribirExcel(trabajo):
 	worksheet.write(13, 0, 'Numero', h1)
 	worksheet.write(13, 1, 'Descripción', h1)
 	worksheet.write(13, 2, 'Cumplimiento', h1)
-	worksheet.write(13, 3, 'Valor', h1)
-	worksheet.write(13, 4, 'Comentario', h1)
+	worksheet.write(13, 3, 'Comentario', h1)
 
 	fila = 14
+	si = 0
+	no = 0
 	for dominio in preparacion.certificacion.dominio_set.all():
 		worksheet.write(fila, 0, dominio.numero, h2)
 		worksheet.write(fila, 1, dominio.nombre, h2)
 		fila += 1
-
+		si_sub = 0
+		no_sub = 0
 		for objetivo in dominio.objetivo_set.all():
 			worksheet.write(fila, 0, objetivo.numero, h3)
 			worksheet.write(fila, 1, objetivo.nombre, h3)
@@ -161,14 +165,44 @@ def escribirExcel(trabajo):
 
 			for control in objetivo.control_set.all():
 				worksheet.write(fila, 0, control.numero)
-				worksheet.write(fila, 1, control.nombre)
+				worksheet.write(fila, 1, control.nombre, text_wrap)
 
 				calificacion = Calificacion.objects.get(evaluacion=preparacion, control=control)
 
 				worksheet.write(fila, 2, calificacion.cumplimiento.titulo)
-				worksheet.write(fila, 3, calificacion.cumplimiento.id)
-				worksheet.write(fila, 4, calificacion.comentario)
+				if calificacion.cumplimiento.id == 1:
+					si_sub += 1
+				if calificacion.cumplimiento.id == 2:
+					no_sub += 1
+				worksheet.write(fila, 3, calificacion.comentario, text_wrap)
 				fila += 1
+
+		worksheet.write(fila, 4, 'SI', center)
+		worksheet.write(fila, 5, 'NO', center)
+		fila += 1
+		worksheet.write(fila, 4, si_sub, center)
+		worksheet.write(fila, 5, no_sub, center)
+		si += si_sub;
+		no += no_sub;
+	fila += 2
+	worksheet.write(fila, 3, 'TOTAL', right)
+	worksheet.write(fila, 4, 'SI', center)
+	worksheet.write(fila, 5, 'NO', center)
+	fila += 1
+	worksheet.write(fila, 4, si_sub, center)
+	worksheet.write(fila, 5, no_sub, center)
+
+	chart = workbook.add_chart({'type': 'pie'})
+	chart.add_series({
+		'name':       'Pie sales data',
+		'categories': ['Informe de auditoria', fila-1, 4, fila-1, 5],
+		'values':     ['Informe de auditoria', fila, 4, fila, 5],
+	})
+
+	chart.set_title({'name': 'Preparación'})
+	chart.set_style(2)
+
+	worksheet.insert_chart('G'+ str(fila), chart)
 
 	fila += 3
 	worksheet.write(fila, 0, 'SEGUNDA PARTE - ANEXO', h1)
@@ -177,14 +211,16 @@ def escribirExcel(trabajo):
 	worksheet.write(fila, 0, 'Numero', h1)
 	worksheet.write(fila, 1, 'Descripción', h1)
 	worksheet.write(fila, 2, 'Cumplimiento', h1)
-	worksheet.write(fila, 3, 'Valor', h1)
-	worksheet.write(fila, 4, 'Comentario', h1)
+	worksheet.write(fila, 3, 'Comentario', h1)
 
 	fila += 1
 	for dominio in evaluacion.certificacion.dominio_set.all():
 		worksheet.write(fila, 0, dominio.numero, h2)
 		worksheet.write(fila, 1, dominio.nombre, h2)
 		fila += 1
+		si_sub = 0
+		no_sub = 0
+		tal_sub = 0
 
 		for objetivo in dominio.objetivo_set.all():
 			worksheet.write(fila, 0, objetivo.numero, h3)
@@ -193,14 +229,38 @@ def escribirExcel(trabajo):
 
 			for control in objetivo.control_set.all():
 				worksheet.write(fila, 0, control.numero)
-				worksheet.write(fila, 1, control.nombre)
+				worksheet.write(fila, 1, control.nombre, text_wrap)
 
 				calificacion = Calificacion.objects.get(evaluacion=evaluacion, control=control)
 
 				worksheet.write(fila, 2, calificacion.cumplimiento.titulo)
-				worksheet.write(fila, 3, calificacion.cumplimiento.id)
-				worksheet.write(fila, 4, calificacion.comentario)
+				if calificacion.cumplimiento.id == 1:
+					si_sub += 1
+				if calificacion.cumplimiento.id == 2:
+					no_sub += 1
+				if calificacion.cumplimiento.id == 3:
+					tal_sub += 1
+				worksheet.write(fila, 3, calificacion.comentario, text_wrap)
 				fila += 1
+		worksheet.write(fila, 4, 'SI', center)
+		worksheet.write(fila, 5, 'NO', center)
+		worksheet.write(fila, 6, 'TAL VEZ', center)
+		fila += 1
+		worksheet.write(fila, 4, si_sub, center)
+		worksheet.write(fila, 5, no_sub, center)
+		worksheet.write(fila, 6, tal_sub, center)
+
+		chart = workbook.add_chart({'type': 'pie'})
+		chart.add_series({
+			'name':       'Pie sales data',
+			'categories': ['Informe de auditoria', fila-1, 4, fila-1, 6],
+			'values':     ['Informe de auditoria', fila, 4, fila, 6],
+		})
+
+		chart.set_title({'name': dominio.nombre})
+		chart.set_style(2)
+
+		worksheet.insert_chart('H'+ str(fila), chart)
 
 	workbook.close()
 	xlsx_data = output.getvalue()
