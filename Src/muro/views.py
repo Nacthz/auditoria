@@ -1,4 +1,4 @@
-from io import BytesIO as stringIOModule
+from io import BytesIO
 import xlsxwriter
 import time
 from django.shortcuts import render, redirect
@@ -6,6 +6,7 @@ from muro.models import Trabajo, Estado
 from certificacion.models import Certificacion, Control
 from evaluacion.models import Evaluacion, Calificacion
 from django.http import HttpResponse
+from reportlab.pdfgen import canvas
 
 #Funcion para tomar un trabajo
 def tomar(request, id):
@@ -89,6 +90,30 @@ def crear_post(request):
 
 	return redirect('usuario:inicio')
 
+def descargar_pdf(request):
+	# Create the HttpResponse object with the appropriate PDF headers.
+	response = HttpResponse(content_type='application/pdf')
+	response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+
+	buffer = BytesIO()
+
+	# Create the PDF object, using the BytesIO object as its "file."
+	p = canvas.Canvas(buffer)
+
+	# Draw things on the PDF. Here's where the PDF generation happens.
+	# See the ReportLab documentation for the full list of functionality.
+	p.drawString(100, 100, "Hello world.")
+
+	# Close the PDF object cleanly.
+	p.showPage()
+	p.save()
+
+	# Get the value of the BytesIO buffer and write it to the response.
+	pdf = buffer.getvalue()
+	buffer.close()
+	response.write(pdf)
+	return response
+
 def descargar(request, id):
 	usuario = request.user
 	if not usuario.is_authenticated():
@@ -110,7 +135,7 @@ def escribirExcel(trabajo):
 	from django.conf import settings
 	import re
 
-	output = stringIOModule()
+	output = BytesIO()
 	workbook = xlsxwriter.Workbook(output)
 	worksheet = workbook.add_worksheet('Informe de auditoria')
 
@@ -193,18 +218,24 @@ def escribirExcel(trabajo):
 	worksheet.write(fila, 5, no_sub, center)
 
 	chart = workbook.add_chart({'type': 'pie'})
+	chart.set_size({'width': 350, 'height': 200})
 	chart.add_series({
 		'name':       'Pie sales data',
 		'categories': ['Informe de auditoria', fila-1, 4, fila-1, 5],
 		'values':     ['Informe de auditoria', fila, 4, fila, 5],
 	})
 
-	chart.set_title({'name': 'Preparación'})
-	chart.set_style(2)
+	chart.set_title({
+		'name': 'PREPARACIÓN',
+		'name_font': {
+			'name': 'Arial',
+			'size': 9
+		},
+	})
 
-	worksheet.insert_chart('G'+ str(fila), chart)
+	worksheet.insert_chart('E'+ str(fila+2), chart)
 
-	fila += 3
+	fila += 12
 	worksheet.write(fila, 0, 'SEGUNDA PARTE - ANEXO', h1)
 
 	fila += 1
@@ -214,14 +245,16 @@ def escribirExcel(trabajo):
 	worksheet.write(fila, 3, 'Comentario', h1)
 
 	fila += 1
+	controles_cant = 0
 	for dominio in evaluacion.certificacion.dominio_set.all():
 		worksheet.write(fila, 0, dominio.numero, h2)
 		worksheet.write(fila, 1, dominio.nombre, h2)
+		fila_chart = fila
 		fila += 1
 		si_sub = 0
 		no_sub = 0
 		tal_sub = 0
-
+		controles_cant = 0
 		for objetivo in dominio.objetivo_set.all():
 			worksheet.write(fila, 0, objetivo.numero, h3)
 			worksheet.write(fila, 1, objetivo.nombre, h3)
@@ -230,7 +263,7 @@ def escribirExcel(trabajo):
 			for control in objetivo.control_set.all():
 				worksheet.write(fila, 0, control.numero)
 				worksheet.write(fila, 1, control.nombre, text_wrap)
-
+				controles_cant += 1
 				calificacion = Calificacion.objects.get(evaluacion=evaluacion, control=control)
 
 				worksheet.write(fila, 2, calificacion.cumplimiento.titulo)
@@ -242,25 +275,33 @@ def escribirExcel(trabajo):
 					tal_sub += 1
 				worksheet.write(fila, 3, calificacion.comentario, text_wrap)
 				fila += 1
-		worksheet.write(fila, 4, 'SI', center)
-		worksheet.write(fila, 5, 'NO', center)
-		worksheet.write(fila, 6, 'NO APLICA', center)
+		worksheet.write(fila_chart, 4, 'SI', center)
+		worksheet.write(fila_chart, 5, 'NO', center)
+		worksheet.write(fila_chart, 6, 'NO APLICA', center)
 		fila += 1
-		worksheet.write(fila, 4, si_sub, center)
-		worksheet.write(fila, 5, no_sub, center)
-		worksheet.write(fila, 6, tal_sub, center)
+		fila_chart += 1
+		worksheet.write(fila_chart, 4, si_sub, center)
+		worksheet.write(fila_chart, 5, no_sub, center)
+		worksheet.write(fila_chart, 6, tal_sub, center)
 
 		chart = workbook.add_chart({'type': 'pie'})
+		chart.set_size({'width': 350, 'height': 120})
 		chart.add_series({
-			'name':       'Pie sales data',
-			'categories': ['Informe de auditoria', fila-1, 4, fila-1, 6],
-			'values':     ['Informe de auditoria', fila, 4, fila, 6],
+			'categories': ['Informe de auditoria', fila_chart-1, 4, fila_chart-1, 6],
+			'values':     ['Informe de auditoria', fila_chart, 4, fila_chart, 6],
 		})
 
-		chart.set_title({'name': dominio.nombre})
-		chart.set_style(2)
+		chart.set_title({
+			'name': dominio.nombre,
+			'name_font': {
+				'name': 'Arial',
+				'size': 9
+			},
+		})
+		worksheet.insert_chart('E'+ str(fila_chart+2), chart)
 
-		worksheet.insert_chart('H'+ str(fila), chart)
+		if controles_cant < 6:
+			fila += 6 - controles_cant
 
 	workbook.close()
 	xlsx_data = output.getvalue()
